@@ -26,7 +26,7 @@ void Union(int p, int q) {
  
  
 int main() {
-    int n, m, c, u, v;
+    int n, m, u, v;
      
     cin >> n >> m;
      
