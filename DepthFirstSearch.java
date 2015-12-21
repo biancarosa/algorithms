@@ -6,10 +6,34 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class DepthFirstSearch {
+    private static boolean visited[];
+    private static Graph graph;
+
+    public static void depthFirstSearch(int w) {
+        visited[w] = true;
+
+        for (int i = 1; i <= graph.getVertices(); i++) {
+            if (graph.hasPathBetween(w,i)) {
+                if (!visited[i]) {
+                    depthFirstSearch(i);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        InputHandler inputHandler = new InputHandler();
+        GraphInputHandler inputHandler = new GraphInputHandler();
         try {
-            inputHandler.readInput();
+            graph = inputHandler.readInput();
+            visited = new boolean[graph.getVertices()+1];
+            for (int i = 0; i < graph.getVertices(); ++i) {
+                visited[i] = false;
+            }
+            depthFirstSearch(1);
+            for (int i = 0; i < graph.getVertices(); ++i) {
+                System.out.println(visited[i]);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,9 +51,21 @@ class Graph {
         graph = new boolean[vertices+1][vertices+1];
     }
 
+    public boolean hasPathBetween(int u, int v) {
+        return this.graph[u][v];
+    }
+
     public void addEdge(int u, int v) {
         this.graph[u][v] = true;
         this.graph[v][u] = true;
+    }
+
+    public int getVertices() {
+        return this.vertices;
+    }
+
+    public int getEdges() {
+        return this.edges;
     }
 
     void print() {
@@ -44,8 +80,8 @@ class Graph {
 }
 
 
-class InputHandler {
-    public void readInput() throws IOException {
+class GraphInputHandler {
+    public Graph readInput() throws IOException {
         System.out.print("Number of vertices: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Integer vertices = Integer.parseInt(reader.readLine());
@@ -63,6 +99,6 @@ class InputHandler {
             graph.addEdge(Integer.parseInt(splitted[0]), Integer.parseInt(splitted[1]));
         }
 
-      //  graph.print();
+        return graph;
     }
 }
